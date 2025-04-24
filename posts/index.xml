@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>All Posts - 我的全新 Hugo 网站</title><link>http://example.org/posts/</link><description>All Posts | 我的全新 Hugo 网站</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 24 Apr 2025 13:13:53 +0800</lastBuildDate><atom:link href="http://example.org/posts/" rel="self" type="application/rss+xml"/><item><title>我的简历</title><link>http://example.org/posts/java%E5%B2%97%E4%BD%8D%E7%AE%80%E5%8E%86/</link><pubDate>Thu, 24 Apr 2025 13:13:53 +0800</pubDate><author>xxxx</author><guid>http://example.org/posts/java%E5%B2%97%E4%BD%8D%E7%AE%80%E5%8E%86/</guid><description><![CDATA[<p><strong>谷寅飞 | Java高级工程师/技术Leader</strong><br>
+<strong>📞 13810663467</strong> | <strong>📧 <a href="mailto:gyf68757@126.com" rel="">gyf68757@126.com</a></strong> | <strong>📍 北京</strong><br>
+<strong>14年经验 | 技术管理复合型人才 | 可立即到岗</strong></p>
+<hr>
+<h3 id="核心优势"><strong>核心优势</strong></h3>
+<ul>
+<li><strong>技术深度</strong>：精通高并发架构设计，主导多个分布式系统落地（SpringCloud/Dubbo），熟悉微服务全链路优化。</li>
+<li><strong>团队管理</strong>：5年技术管理经验，带领团队完成3个百万级用户项目交付，擅长跨部门协作与资源整合。</li>
+<li><strong>全栈能力</strong>：覆盖后端（Java/SpringBoot）、中间件（K8S/Redis/Kafka）、前端（Vue/小程序）全链路开发。</li>
+<li><strong>稳定性保障</strong>：多次主导老旧系统重构，保障业务平稳升级，0重大线上事故。</li>
+</ul>
+<hr>
+<h3 id="工作经历"><strong>工作经历</strong></h3>
+<h4 id="沣邦融资租赁上海有限公司202101-202408"><strong>沣邦融资租赁（上海）有限公司</strong>（2021.01-2024.08）</h4>
+<p><strong>Java高级工程师/技术组长</strong></p>]]></description></item></channel></rss>
