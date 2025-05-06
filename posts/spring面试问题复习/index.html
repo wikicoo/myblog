@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Spring面试问题复习 - Fulur</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/">
+  <meta property="og:site_name" content="Fulur">
+  <meta property="og:title" content="Spring面试问题复习">
+  <meta property="og:description" content="问题 1：Java 中 HashMap 和 ConcurrentHashMap 有何区别？HashMap 是线程安全的吗？如何保证线程安全？ 1. HashMap 的线程安全问题 问题：在多线程环境下，多个线程同时对 HashMap 进行读写操作，可能导致数据不一致、死循环或程序崩溃。 示例：如果一个线程在迭代 HashMap，而另一个线程同时修改它，可能会抛出 ConcurrentModificationException。 2. ConcurrentHashMap 的实现机制 分段锁（Segment Locking）：早期的 ConcurrentHashMap 将数据划分为多个段，每个段有自己的锁，多个线程可以并发地访问不同的段，从而提高并发性能。 Java 8 的优化：在 Java 8 中，ConcurrentHashMap 采用了更细粒度的锁机制，如使用 synchronized 和 CAS（Compare-And-Swap）操作，进一步提升了并发性能。 3. ConcurrentHashMap 的限制 不允许 null 键或值：为了避免歧义和潜在的 NullPointerException，ConcurrentHashMap 不允许存储 null 键或值。 4. 线程安全的替代方案 Collections.synchronizedMap：可以使用 Collections.synchronizedMap 方法将 HashMap 包装为线程安全的版本，但需要手动同步迭代操作。 手动同步：使用 synchronized 关键字或 ReentrantLock 对 HashMap 的操作进行同步，以确保线程安全。 问题 2：Java 中的异常体系是怎样的？Checked Exception 和 Unchecked Exception 有何区别？如何合理设计异常处理机制？ 1. 异常类型的定义 受检异常（Checked Exception）：">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-27T16:52:52+08:00">
+    <meta property="article:modified_time" content="2025-04-27T16:52:52+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Spring面试问题复习">
+  <meta name="twitter:description" content="问题 1：Java 中 HashMap 和 ConcurrentHashMap 有何区别？HashMap 是线程安全的吗？如何保证线程安全？ 1. HashMap 的线程安全问题 问题：在多线程环境下，多个线程同时对 HashMap 进行读写操作，可能导致数据不一致、死循环或程序崩溃。 示例：如果一个线程在迭代 HashMap，而另一个线程同时修改它，可能会抛出 ConcurrentModificationException。 2. ConcurrentHashMap 的实现机制 分段锁（Segment Locking）：早期的 ConcurrentHashMap 将数据划分为多个段，每个段有自己的锁，多个线程可以并发地访问不同的段，从而提高并发性能。 Java 8 的优化：在 Java 8 中，ConcurrentHashMap 采用了更细粒度的锁机制，如使用 synchronized 和 CAS（Compare-And-Swap）操作，进一步提升了并发性能。 3. ConcurrentHashMap 的限制 不允许 null 键或值：为了避免歧义和潜在的 NullPointerException，ConcurrentHashMap 不允许存储 null 键或值。 4. 线程安全的替代方案 Collections.synchronizedMap：可以使用 Collections.synchronizedMap 方法将 HashMap 包装为线程安全的版本，但需要手动同步迭代操作。 手动同步：使用 synchronized 关键字或 ReentrantLock 对 HashMap 的操作进行同步，以确保线程安全。 问题 2：Java 中的异常体系是怎样的？Checked Exception 和 Unchecked Exception 有何区别？如何合理设计异常处理机制？ 1. 异常类型的定义 受检异常（Checked Exception）：">
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/" /><link rel="prev" href="http://localhost:1313/posts/java%E5%B2%97%E4%BD%8D%E7%AE%80%E5%8E%86/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Spring面试问题复习",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0\/"
+        },"genre": "posts","wordcount":  3925 ,
+        "url": "http:\/\/localhost:1313\/posts\/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0\/","datePublished": "2025-04-27T16:52:52+08:00","dateModified": "2025-04-27T16:52:52+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Fulur">Fulur</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Fulur">Fulur</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Spring面试问题复习</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-04-27">2025-04-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3925 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;8 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#问题-1java-中-hashmap-和-concurrenthashmap-有何区别hashmap-是线程安全的吗如何保证线程安全">问题 1：Java 中 <code>HashMap</code> 和 <code>ConcurrentHashMap</code> 有何区别？<code>HashMap</code> 是线程安全的吗？如何保证线程安全？</a></li>
+        <li><a href="#问题-2java-中的异常体系是怎样的checked-exception-和-unchecked-exception-有何区别如何合理设计异常处理机制">问题 2：Java 中的异常体系是怎样的？<code>Checked Exception</code> 和 <code>Unchecked Exception</code> 有何区别？如何合理设计异常处理机制？</a></li>
+        <li><a href="#问题-3在项目中如何使用-spring-bootspring-cloudmybatis-等框架它们如何协同工作">问题 3：在项目中如何使用 Spring Boot、Spring Cloud、MyBatis 等框架？它们如何协同工作？</a></li>
+        <li><a href="#问题-4请简述你在实际项目中使用-spring-bootspring-cloud-和-mybatis-的经验包括遇到的挑战和解决方案">问题 4：请简述你在实际项目中使用 Spring Boot、Spring Cloud 和 MyBatis 的经验，包括遇到的挑战和解决方案。</a></li>
+        <li><a href="#面试官提问">面试官提问：</a></li>
+        <li><a href="#面试官提问-1">面试官提问：</a></li>
+        <li><a href="#实践案例">实践案例</a></li>
+        <li><a href="#总结一下">总结一下：</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h3 id="问题-1java-中-hashmap-和-concurrenthashmap-有何区别hashmap-是线程安全的吗如何保证线程安全">问题 1：Java 中 <code>HashMap</code> 和 <code>ConcurrentHashMap</code> 有何区别？<code>HashMap</code> 是线程安全的吗？如何保证线程安全？</h3>
+<h4 id="1-hashmap-的线程安全问题">1. <code>HashMap</code> 的线程安全问题</h4>
+<ul>
+<li><strong>问题</strong>：在多线程环境下，多个线程同时对 <code>HashMap</code> 进行读写操作，可能导致数据不一致、死循环或程序崩溃。</li>
+<li><strong>示例</strong>：如果一个线程在迭代 <code>HashMap</code>，而另一个线程同时修改它，可能会抛出 <code>ConcurrentModificationException</code>。</li>
+</ul>
+<h4 id="2-concurrenthashmap-的实现机制">2. <code>ConcurrentHashMap</code> 的实现机制</h4>
+<ul>
+<li><strong>分段锁（Segment Locking）</strong>：早期的 <code>ConcurrentHashMap</code> 将数据划分为多个段，每个段有自己的锁，多个线程可以并发地访问不同的段，从而提高并发性能。</li>
+<li><strong>Java 8 的优化</strong>：在 Java 8 中，<code>ConcurrentHashMap</code> 采用了更细粒度的锁机制，如使用 <code>synchronized</code> 和 <code>CAS</code>（Compare-And-Swap）操作，进一步提升了并发性能。</li>
+</ul>
+<h4 id="3-concurrenthashmap-的限制">3. <code>ConcurrentHashMap</code> 的限制</h4>
+<ul>
+<li><strong>不允许 <code>null</code> 键或值</strong>：为了避免歧义和潜在的 <code>NullPointerException</code>，<code>ConcurrentHashMap</code> 不允许存储 <code>null</code> 键或值。</li>
+</ul>
+<h4 id="4-线程安全的替代方案">4. 线程安全的替代方案</h4>
+<ul>
+<li><strong><code>Collections.synchronizedMap</code></strong>：可以使用 <code>Collections.synchronizedMap</code> 方法将 <code>HashMap</code> 包装为线程安全的版本，但需要手动同步迭代操作。</li>
+<li><strong>手动同步</strong>：使用 <code>synchronized</code> 关键字或 <code>ReentrantLock</code> 对 <code>HashMap</code> 的操作进行同步，以确保线程安全。</li>
+</ul>
+<hr>
+<h3 id="问题-2java-中的异常体系是怎样的checked-exception-和-unchecked-exception-有何区别如何合理设计异常处理机制">问题 2：Java 中的异常体系是怎样的？<code>Checked Exception</code> 和 <code>Unchecked Exception</code> 有何区别？如何合理设计异常处理机制？</h3>
+<h4 id="1-异常类型的定义">1. 异常类型的定义</h4>
+<ul>
+<li>
+<p><strong>受检异常（Checked Exception）</strong>：</p>
+<ul>
+<li>是 <code>Exception</code> 类及其子类（不包括 <code>RuntimeException</code>）的实例。</li>
+<li>编译器强制要求在代码中显式处理，否则程序无法通过编译。</li>
+<li><strong>示例</strong>：<code>IOException</code>、<code>SQLException</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>非受检异常（Unchecked Exception）</strong>：</p>
+<ul>
+<li>是 <code>RuntimeException</code> 类及其子类的实例。</li>
+<li>编译器不强制要求在代码中显式处理，但在运行时可能导致程序异常终止。</li>
+<li><strong>示例</strong>：<code>NullPointerException</code>、<code>IndexOutOfBoundsException</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-异常处理的最佳实践">2. 异常处理的最佳实践</h4>
+<ul>
+<li>
+<p><strong>使用特定的异常类型</strong>：尽量捕获和抛出具体的异常类型，而不是使用泛型的 <code>Exception</code> 类。</p>
+</li>
+<li>
+<p><strong>避免捕获过于宽泛的异常</strong>：捕获 <code>Throwable</code> 或 <code>Exception</code> 可能会掩盖实际的问题，增加调试难度。</p>
+</li>
+<li>
+<p><strong>使用自定义异常类</strong>：根据业务需求定义自定义异常类，可以提高代码的可读性和可维护性。</p>
+</li>
+<li>
+<p><strong>异常的封装与传播</strong>：在多层调用的情况下，可以使用异常链（Exception Chaining）将原始异常封装在新的异常中，保留异常的堆栈信息，便于定位问题。</p>
+</li>
+<li>
+<p><strong>全局异常处理</strong>：在使用 Spring 框架时，可以通过 <code>@ControllerAdvice</code> 和 <code>@ExceptionHandler</code> 注解实现全局异常处理，统一管理异常响应。</p>
+</li>
+</ul>
+<h4 id="3-异常处理示例">3. 异常处理示例</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 自定义异常类</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">InvalidUserInputException</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">InvalidUserInputException</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 使用自定义异常</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processUserInput</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InvalidUserInputException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InvalidUserInputException</span><span class="p">(</span><span class="s">&#34;User input cannot be null or empty&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 处理输入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="问题-3在项目中如何使用-spring-bootspring-cloudmybatis-等框架它们如何协同工作">问题 3：在项目中如何使用 Spring Boot、Spring Cloud、MyBatis 等框架？它们如何协同工作？</h3>
+<h4 id="1-spring-boot-与-mybatis-的集成">1. Spring Boot 与 MyBatis 的集成</h4>
+<ul>
+<li>
+<p><strong>依赖配置</strong>：
+在 <code>pom.xml</code> 中添加 MyBatis 的起步依赖：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.mybatis.spring.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>mybatis-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>2.2.0<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Mapper 扫描</strong>：
+使用 <code>@MapperScan</code> 注解指定 Mapper 接口所在的包：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootApplication</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@MapperScan</span><span class="p">(</span><span class="s">&#34;com.example.mapper&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Application</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div></li>
+<li>
+<p><strong>配置文件</strong>：
+在 <code>application.yml</code> 或 <code>application.properties</code> 中配置数据库连接信息和 MyBatis 的相关设置。</p>
+</li>
+</ul>
+<h4 id="2-spring-cloud-的核心组件">2. Spring Cloud 的核心组件</h4>
+<ul>
+<li><strong>服务注册与发现</strong>：使用 Eureka 实现服务的注册与发现。</li>
+<li><strong>配置管理</strong>：使用 Spring Cloud Config 实现集中式配置管理。</li>
+<li><strong>断路器</strong>：使用 Hystrix 或 Resilience4j 实现服务的容错处理。</li>
+<li><strong>网关</strong>：使用 Spring Cloud Gateway 实现统一的 API 网关。</li>
+<li><strong>链路追踪</strong>：使用 Spring Cloud Sleuth 和 Zipkin 实现分布式链路追踪。</li>
+</ul>
+<h4 id="3-实际应用场景">3. 实际应用场景</h4>
+<p>在一个典型的微服务架构中，可以使用 Spring Boot 创建多个独立的服务，每个服务负责特定的业务功能。通过 Spring Cloud 的服务注册与发现机制，实现服务之间的通信和负载均衡。使用 MyBatis 操作数据库，实现数据的持久化。通过 Spring Cloud Gateway 实现统一的 API 入口，并使用断路器和链路追踪等机制，提升系统的稳定性和可观测性。</p>
+<hr>
+<h3 id="问题-4请简述你在实际项目中使用-spring-bootspring-cloud-和-mybatis-的经验包括遇到的挑战和解决方案">问题 4：请简述你在实际项目中使用 Spring Boot、Spring Cloud 和 MyBatis 的经验，包括遇到的挑战和解决方案。</h3>
+<p>在实际项目中，我们按业务模块拆分，使用 Spring Boot 构建各个独立子服务，每个服务注册到 Spring Cloud 的注册中心（如 Eureka/Nacos），实现服务的注册与发现。</p>
+<p>持久化层采用 MyBatis + MySQL，每个服务单独管理自己的数据库表，避免服务间数据强依赖。</p>
+<p>随着服务数量增多，为了简化配置管理，我们引入 Spring Cloud Config，配置文件统一存储在 Git 仓库，并通过 <code>@RefreshScope</code> 支持动态刷新，提高了维护效率。</p>
+<p>所有对外的请求统一走 Spring Cloud Gateway，作为系统的唯一入口，兼顾路由转发、统一鉴权和限流功能。</p>
+<p>在服务之间调用时，我们使用 Spring Cloud LoadBalancer 实现客户端负载均衡，同时在服务调用中引入 Resilience4j，实现熔断降级，防止单点服务故障引发雪崩效应。</p>
+<p>为了提高故障定位的效率，我们接入了 Spring Cloud Sleuth 进行分布式链路追踪，配合 Zipkin 做链路分析，能够快速定位到具体异常的微服务及调用链路节点。</p>
+<p>通过这一套微服务体系搭建，我们的系统在功能扩展性、故障容错性、配置管理便利性等方面都有了明显提升。</p>
+<h3 id="面试官提问">面试官提问：</h3>
+<blockquote>
+<p>在你刚才提到微服务拆分和调用中，服务之间的通信用的是什么协议？</p>
+<p>为什么不用传统的 HTTP 调用，或者直接用 MQ？</p>
+<p>如果调用链上某个服务响应很慢，整个链路就会卡住，这种情况下你们是怎么优化的？有没有遇到过实际的问题？怎么解决的？</p></blockquote>
+<hr>
+<p>✅ 回答提示：</p>
+<ul>
+<li>服务间通信协议（比如 REST / gRPC / Dubbo，为什么选择？）</li>
+<li>为什么不直接用消息队列？（同步 vs 异步，场景适配）</li>
+<li>对调用链慢响应问题，怎么防护？（比如超时控制、异步化、熔断降级）</li>
+<li>举个你遇到过的真实小案例（比如A调B，B慢，结果A线程堆积，后面做了什么优化）</li>
+</ul>
+<hr>
+<p>在我们项目中，微服务间通信主要使用 HTTP + REST 风格接口，底层是基于 TCP 传输的。相比之下，像 Dubbo 是基于 TCP 直接建立长连接，并且自定义了序列化协议，因此在高并发、低延迟场景下效率更高。但考虑到团队技能栈、部署运维复杂度等因素，我们选择了更标准易用的 HTTP 协议。</p>
+<p>在服务间调用中，像订单创建、账户余额更新等关键链路必须采用同步调用以保证事务一致性，而积分发放、短信通知等则通过消息队列异步处理，降低系统耦合度并削峰填谷。</p>
+<p>为了防止调用链路因为单点慢响应而被拖垮，我们设置了调用超时时间（例如Feign Client的connectTimeout/readTimeout），并引入了Resilience4j做熔断降级和线程池隔离。当检测到下游响应超时或错误率升高时，会自动熔断，快速失败。</p>
+<p>比如在实际案例中，用户下单后会触发风控评估。风控模块需要调用多个第三方接口，处理时间长且不稳定。为了解决这一问题，我们将订单服务与风控服务解耦，通过Kafka异步发送风控任务，由多个风控服务节点并发消费。任务完成后再异步通知订单系统更新状态，大大缩短了用户下单的响应时间，并通过扩容风控服务节点来提升整体系统吞吐量和容错能力。</p>
+<hr>
+<h3 id="面试官提问-1">面试官提问：</h3>
+<blockquote>
+<p>假设你们的系统中，用户下单时需要同时扣减库存、扣减账户余额、生成订单，这三个操作分别在三个不同的微服务中。</p>
+<p>如果在扣减余额成功后，扣减库存失败了，怎么保证数据的一致性？</p>
+<p>请谈谈你了解的分布式事务解决方案。</p>
+<p>有没有实际使用过？用了哪种？为什么选它？</p></blockquote>
+<hr>
+<p>✅ 回答提示：</p>
+<ul>
+<li>先讲为什么传统事务（ACID）在微服务里不适用</li>
+<li>再说分布式事务的常见方案（2PC，TCC，可靠消息最终一致性，本地消息表）</li>
+<li>最后说说自己项目里遇到过的选择和实践，比如Seata、RocketMQ事务消息、自定义补偿机制</li>
+<li>最好还能指出各种方案的优缺点</li>
+</ul>
+<hr>
+<p>在单体应用中，传统的本地事务（基于数据库ACID特性）可以保证一组操作要么全部成功，要么全部失败。但在分布式系统中，多个服务、多个数据库分别独立，本地事务无法跨服务、跨数据库管理，所以需要使用分布式事务。</p>
+<p>常见的分布式事务解决方案主要有这几种：</p>
+<hr>
+<h4 id="1-两阶段提交协议2pc">1. <strong>两阶段提交协议（2PC）</strong></h4>
+<ul>
+<li>经典方案，典型代表是<strong>XA协议</strong>。</li>
+<li>原理是：
+<ul>
+<li><strong>第一阶段：</strong> 各个参与方（数据库）预提交事务，锁定资源。</li>
+<li><strong>第二阶段：</strong> 如果全部预提交成功，就正式提交，否则回滚。</li>
+</ul>
+</li>
+<li><strong>优点：</strong>
+<ul>
+<li>理论上能保证强一致性。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong>
+<ul>
+<li>效率低，阻塞严重，占用资源。</li>
+<li>容易出现协调器单点故障问题。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-tcctry-confirm-cancel模式">2. <strong>TCC（Try-Confirm-Cancel）模式</strong></h4>
+<ul>
+<li>典型的柔性事务方案，需要业务开发实现3个接口：
+<ul>
+<li><strong>Try：</strong> 预留资源（如冻结余额、锁定库存）。</li>
+<li><strong>Confirm：</strong> 确认并正式提交操作。</li>
+<li><strong>Cancel：</strong> 取消并回滚预留的资源。</li>
+</ul>
+</li>
+<li><strong>优点：</strong>
+<ul>
+<li>效率高，控制粒度细，适合高并发场景。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong>
+<ul>
+<li>侵入性大，需要业务系统配合开发Try/Confirm/Cancel接口。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-可靠消息最终一致性">3. <strong>可靠消息最终一致性</strong></h4>
+<ul>
+<li>利用消息队列来异步协调服务之间的状态。</li>
+<li>原理：
+<ul>
+<li>发送半消息（处于待确认状态），本地操作成功后再确认发送。</li>
+<li>如果业务失败则撤回消息，不继续发送。</li>
+</ul>
+</li>
+<li>典型实现有：<strong>RocketMQ事务消息</strong>、<strong>RabbitMQ + 本地消息表</strong>。</li>
+<li><strong>优点：</strong>
+<ul>
+<li>异步处理，性能好，适合大量业务场景。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong>
+<ul>
+<li>不是强一致性，是<strong>最终一致性</strong>，需要设计好补偿机制（如超时重试、人工兜底等）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="4-本地消息表outbox模式">4. <strong>本地消息表（Outbox模式）</strong></h4>
+<ul>
+<li>将操作数据和发送消息放在同一个本地数据库事务中。</li>
+<li>定期扫描本地消息表，将未发送的消息推送到消息队列中。</li>
+<li><strong>优点：</strong>
+<ul>
+<li>简单易用，不需要强依赖MQ事务特性。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong>
+<ul>
+<li>需要额外的定时任务扫描处理。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="实践案例">实践案例</h3>
+<blockquote>
+<p>在一个电商项目中，用户下单时需要同时扣减库存、扣减账户余额、生成订单。我们使用了<strong>RocketMQ的事务消息</strong>来保证最终一致性。</p>
+<p>流程大概是：</p>
+<ul>
+<li>用户提交订单请求 → 创建一条初始订单（状态：待支付） → 发送事务消息到MQ。</li>
+<li>在本地事务中同时扣减库存、扣减余额。</li>
+<li>如果本地事务成功，提交事务消息，其他服务（库存服务、账户服务）消费消息更新状态。</li>
+<li>如果失败，回滚本地事务，并取消事务消息。</li>
+</ul>
+<p>为了避免消息丢失，还设计了<strong>补偿机制</strong>：定时扫描异常订单，手动修复或重试发送。</p></blockquote>
+<hr>
+<h3 id="总结一下">总结一下：</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">方案</th>
+          <th style="text-align: left">特点</th>
+          <th style="text-align: left">优缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">2PC</td>
+          <td style="text-align: left">强一致性</td>
+          <td style="text-align: left">效率低，阻塞，生产上很少用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TCC</td>
+          <td style="text-align: left">业务侵入性高但灵活</td>
+          <td style="text-align: left">适合关键交易场景</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息最终一致性</td>
+          <td style="text-align: left">最常用，性能好</td>
+          <td style="text-align: left">只保证最终一致性，需要补偿</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">本地消息表</td>
+          <td style="text-align: left">简单，不依赖事务消息</td>
+          <td style="text-align: left">需要定时任务维护</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-04-27</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/" data-title="Spring面试问题复习"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/" data-title="Spring面试问题复习"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/" data-title="Spring面试问题复习"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/spring%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E5%A4%8D%E4%B9%A0/" data-title="Spring面试问题复习"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/java%E5%B2%97%E4%BD%8D%E7%AE%80%E5%8E%86/" class="prev" rel="prev" title="我的简历"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>我的简历</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.146.7">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
