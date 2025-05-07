@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>JVM基础：对象布局实战：用 JOL 工具看看真实结构 - Fulur</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/">
+  <meta property="og:site_name" content="Fulur">
+  <meta property="og:title" content="JVM基础：对象布局实战：用 JOL 工具看看真实结构">
+  <meta property="og:description" content="纸上得来终觉浅，我们现在来用工具实战验证一下：Java 对象在内存中到底长什么样？
+JDK 提供了一款由官方支持的内存分析利器 —— JOL（Java Object Layout），它能让我们像 X 光一样看穿对象的每一个字节。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-27T19:52:52+08:00">
+    <meta property="article:modified_time" content="2025-04-27T19:52:52+08:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="JVM">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="JVM基础：对象布局实战：用 JOL 工具看看真实结构">
+  <meta name="twitter:description" content="纸上得来终觉浅，我们现在来用工具实战验证一下：Java 对象在内存中到底长什么样？
+JDK 提供了一款由官方支持的内存分析利器 —— JOL（Java Object Layout），它能让我们像 X 光一样看穿对象的每一个字节。">
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" /><link rel="prev" href="http://localhost:1313/posts/java/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "JVM基础：对象布局实战：用 JOL 工具看看真实结构",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/java\/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84\/"
+        },"genre": "posts","keywords": "java, JVM","wordcount":  755 ,
+        "url": "http:\/\/localhost:1313\/posts\/java\/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84\/","datePublished": "2025-04-27T19:52:52+08:00","dateModified": "2025-04-27T19:52:52+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "fulu"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Fulur">Fulur</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Fulur">Fulur</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">JVM基础：对象布局实战：用 JOL 工具看看真实结构</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>fulu</a></span>&nbsp;<span class="post-category">included in <a href="/categories/jvm%E5%9F%BA%E7%A1%80/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>JVM基础</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-04-27">2025-04-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;755 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-什么是-jol">1. 什么是 JOL？</a></li>
+    <li><a href="#2-实战演示一个简单类的内存结构">2. 实战演示：一个简单类的内存结构</a></li>
+    <li><a href="#解读说明">解读说明：</a></li>
+    <li><a href="#3-换个顺序会怎样字段重排实验">3. 换个顺序会怎样？字段重排实验</a></li>
+    <li><a href="#4-对象的继承结构如何布局">4. 对象的继承结构如何布局？</a></li>
+    <li><a href="#-小结">✅ 小结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>纸上得来终觉浅，我们现在来用工具实战验证一下：<strong>Java 对象在内存中到底长什么样？</strong></p>
+<p>JDK 提供了一款由官方支持的内存分析利器 —— <strong>JOL（Java Object Layout）</strong>，它能让我们像 X 光一样看穿对象的每一个字节。</p>
+<hr>
+<h2 id="1-什么是-jol">1. 什么是 JOL？</h2>
+<p>JOL 全称是 <strong>Java Object Layout</strong>，是 OpenJDK 官方提供的工具库，用于分析对象在内存中的布局。</p>
+<p>GitHub 项目地址：
+<a href="https://github.com/openjdk/jol" target="_blank" rel="noopener noreffer ">https://github.com/openjdk/jol</a></p>
+<p>Maven 依赖如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.openjdk.jol<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>jol-core<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>0.16<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><hr>
+<h2 id="2-实战演示一个简单类的内存结构">2. 实战演示：一个简单类的内存结构</h2>
+<p>我们先来看这个类：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleObject</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">flag</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>使用 JOL 工具查看内存结构：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.openjdk.jol.info.ClassLayout</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JolTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">SimpleObject</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SimpleObject</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">ClassLayout</span><span class="p">.</span><span class="na">parseInstance</span><span class="p">(</span><span class="n">obj</span><span class="p">).</span><span class="na">toPrintable</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>输出如下（以 64 位 JVM、开启压缩指针为例）：</p>
+<pre tabindex="0"><code>java.lang.Object object internals:
+ OFFSET  SIZE    TYPE              DESCRIPTION
+      0     8                     Mark Word
+      8     4                     Klass Pointer
+     12     4  int                id
+     16     1  boolean            flag
+     17     3                     Padding
+Instance size: 20 bytes
+Space losses: 3 bytes internal + 4 bytes external = 7 bytes total
+</code></pre><h2 id="解读说明">解读说明：</h2>
+<ul>
+<li><strong>对象头</strong>：8 字节（Mark Word）+ 4 字节（Klass Pointer）= 12 字节</li>
+<li><strong>字段部分</strong>：int 占 4 字节，boolean 占 1 字节</li>
+<li><strong>Padding</strong>：为了对齐成 8 的倍数，填充了 3 字节</li>
+<li><strong>总大小</strong>：20 字节（但真实占用内存空间是 24 字节）</li>
+</ul>
+<hr>
+<h2 id="3-换个顺序会怎样字段重排实验">3. 换个顺序会怎样？字段重排实验</h2>
+<p>将字段顺序改为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">flag</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>再次执行 JOL，输出结果：</p>
+<pre tabindex="0"><code> OFFSET  SIZE    TYPE              DESCRIPTION
+      0     8                     Mark Word
+      8     4                     Klass Pointer
+     12     1  boolean            flag
+     13     3                     Padding
+     16     4  int                id
+Instance size: 24 bytes
+</code></pre><p>因为 <code>boolean</code> 放前面，<code>int</code> 被迫换到下一个对齐边界，<strong>反而让整体占用更大</strong>。</p>
+<p>📌 <strong>结论</strong>：字段顺序会影响内存布局，字段紧凑型设计在高性能系统（如缓存结构）中尤为重要。</p>
+<hr>
+<h2 id="4-对象的继承结构如何布局">4. 对象的继承结构如何布局？</h2>
+<p>继承关系的类，会将<strong>父类字段排在前面</strong>，子类字段依次跟在后面。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">B</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>JOL 分析后，你会看到：</p>
+<ul>
+<li><code>int a</code> 是来自父类的字段，排在前面。</li>
+<li><code>boolean b</code> 和 <code>long c</code> 属于子类，跟在后面。</li>
+<li>同样存在字节对齐与填充问题。</li>
+</ul>
+<hr>
+<h2 id="-小结">✅ 小结</h2>
+<ul>
+<li>JOL 能让你可视化对象的真实内存结构，适用于调优和面试。</li>
+<li>字段顺序不当，会引入大量的内存碎片（padding）。</li>
+<li>对齐规则不是摆设，真实项目中高频对象的内存效率会被严重影响。</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-04-27</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" data-title="JVM基础：对象布局实战：用 JOL 工具看看真实结构" data-hashtags="java,JVM"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" data-hashtag="java"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" data-title="JVM基础：对象布局实战：用 JOL 工具看看真实结构"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" data-title="JVM基础：对象布局实战：用 JOL 工具看看真实结构"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/java/jvm%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80%E5%AE%9E%E6%88%98%E7%94%A8-jol-%E5%B7%A5%E5%85%B7%E7%9C%8B%E7%9C%8B%E7%9C%9F%E5%AE%9E%E7%BB%93%E6%9E%84/" data-title="JVM基础：对象布局实战：用 JOL 工具看看真实结构"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/jvm/">JVM</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/java/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/" class="prev" rel="prev" title="JVM基础：Java对象的创建与内存布局：你以为的 new 不止 new"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>JVM基础：Java对象的创建与内存布局：你以为的 new 不止 new</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.146.7">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
