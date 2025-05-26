@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SpringBoot on Fulur</title><link>http://example.org/tags/springboot/</link><description>Recent content in SpringBoot on Fulur</description><generator>Hugo</generator><language>zh-CN</language><lastBuildDate>Wed, 30 Apr 2025 17:52:52 +0800</lastBuildDate><atom:link href="http://example.org/tags/springboot/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring：SpringBoot 核心原理剖析与实战：从启动流程到自动装配</title><link>http://example.org/posts/java/spring/springboot-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E6%88%98/</link><pubDate>Wed, 30 Apr 2025 17:52:52 +0800</pubDate><guid>http://example.org/posts/java/spring/springboot-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E6%88%98/</guid><description>&lt;h2 id="一为什么要掌握-springboot-核心原理">一、为什么要掌握 SpringBoot 核心原理？&lt;/h2>
+&lt;p>在大多数项目中，SpringBoot 几乎是标配。熟悉它的使用只是“基本功”，&lt;strong>理解它的核心机制&lt;/strong>，才能真正解决下面这些问题：&lt;/p>
+&lt;ul>
+&lt;li>SpringBoot 启动流程里，自动装配是怎么运作的？&lt;/li>
+&lt;li>启动太慢怎么优化？哪一环卡住了？&lt;/li>
+&lt;li>自定义 starter 要怎么写才不会和别人的冲突？&lt;/li>
+&lt;li>自动装配出错怎么精准排查？&lt;/li>
+&lt;li>为什么某些 Bean 明明写了却没生效？&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="二springboot-启动流程全览执行链路图解">二、SpringBoot 启动流程全览（执行链路图解）&lt;/h2>
+&lt;p>SpringBoot 应用的启动是由 &lt;code>SpringApplication.run(...)&lt;/code> 触发的，下面是一张完整链路简图：&lt;/p></description></item></channel></rss>
